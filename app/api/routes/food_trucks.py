@@ -1,6 +1,7 @@
 """HTTP route handlers for food-truck list and nearby-search operations."""
 
 from collections.abc import Generator
+import logging
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, Query
@@ -8,8 +9,10 @@ from fastapi import APIRouter, Depends, Query
 from app.db.session import get_connection
 from app.repositories.food_truck_repository import FoodTruck, FoodTruckRepository
 from app.schemas.food_truck import FoodTruckOut, NearbyQueryParams
-from app.services.food_truck_service import FoodTruckService, NearbyFoodTruck
+from app.services.food_truck_service import FoodTruckService
 
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/food-trucks", tags=["Food trucks"])
 
@@ -48,7 +51,17 @@ def list_food_trucks(
 ) -> list[FoodTruckOut]:
     """Return a paginated list of stored food-truck locations."""
     trucks = service.list_food_trucks(food_type=food_type)
-    return [_to_output(truck) for truck in trucks[offset : offset + limit]]
+    response_items = [_to_output(truck) for truck in trucks[offset : offset + limit]]
+    logger.info(
+        "Food-truck list completed",
+        extra={
+            "offset": offset,
+            "limit": limit,
+            "food_type": food_type,
+            "found": len(response_items),
+        },
+    )
+    return response_items
 
 
 @router.get("/nearby", response_model=list[FoodTruckOut], summary="Find nearby food trucks")
@@ -63,7 +76,18 @@ def find_nearby_food_trucks(
         radius_km=query.radius_km,
         food_type=query.food_type,
     )
-    return [
+    response_items = [
         _to_output(result.truck, distance_km=result.distance_km)
         for result in nearby_trucks
     ]
+    logger.info(
+        "Nearby food-truck search completed",
+        extra={
+            "lat": query.lat,
+            "lng": query.lng,
+            "radius_km": query.radius_km,
+            "food_type": query.food_type,
+            "found": len(response_items),
+        },
+    )
+    return response_items
