@@ -1,0 +1,23 @@
+# Python virtual environments and bytecode
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+
+# Local configuration and SQLite runtime data
+.env
+*.db
+*.sqlite
+*.sqlite3
+
+# Downloaded source data
+/data/*.csv
+/data/*.json
+
+# Local tooling
+.coverage
+htmlcov/
+.idea/
+.vscode/
