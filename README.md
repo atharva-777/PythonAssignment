@@ -2,7 +2,7 @@
 
 A production-minded FastAPI backend for the KJBN Labs coding assignment. It uses San Francisco's public **Mobile Food Facility Permit** dataset to answer the Food Trucks functional spec: *what types of food trucks might be found near a location on a map?*
 
-The Food Trucks option was chosen because it has a real, public source of geocoded data and makes the assignment's core concerns—outgoing API calls, data validation, persistence, geographical search, and an HTTP API—easy to demonstrate in one focused service.
+The Food Trucks option was chosen because it has a real, public source of geocoded data and makes the assignment's core concerns-outgoing API calls, data validation, persistence, geographical search, and an HTTP API-easy to demonstrate in one focused service.
 
 ## Features
 
